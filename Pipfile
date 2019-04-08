@@ -13,6 +13,7 @@ django = "*"
 channels = "*"
 channels-redis = "*"
 redis = "*"
+nanoid = "*"
 
 [requires]
 python_version = "3.7"

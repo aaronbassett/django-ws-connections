@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Counting WebSocket Connections</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <article class="message  is-link">
+            <div class="message-header has-text-centered">
+                <h1 class="is-size-3">Random slug: {{ nanoid }}</h1>
+                <p class="buttons">
+                    <a class="button is-success" id="add">
+                        <span class="icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </span>
+                        <span>Add</span>
+                    </a>
+                    <a class="button is-danger" id="remove">
+                        <span class="icon">
+                            <i class="fas fa-minus-circle"></i>
+                        </span>
+                        <span>Remove</span>
+                    </a>
+                </p>
+            </div>
+        </article>
+        <div id="columnsWrapper">
+          <div class="columns">
+            
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+
+  <script>
+    var iframeHtml = '<div class="column is-one-third"><iframe src="/count/{{ nanoid }}" class=" is-marginless is-paddingless"></iframe></div>'
+    $("#add").on("click", function(event) {
+        if($('.column').length % 3 == 0) {
+          $('#columnsWrapper').append('<div class="columns"></div>')
+        }
+        $(".columns:last").append(iframeHtml)
+    })
+
+    $("#remove").on("click", function(event) {
+        $('.column:last').remove()
+    });
+  </script>
+</html>
