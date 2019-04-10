@@ -32,6 +32,16 @@ class CountConsumer(AsyncWebsocketConsumer):
         )
 
         await self.accept()
+    
+    async def receive(self, *args, **kwargs):
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'connection_message',
+                'updated': self.redis_client.get(f'{self.room_name}:last_connection').decode("utf-8"),
+                'connections': self.redis_client.get(f'{self.room_name}:connection_count').decode("utf-8")
+            }
+        )
 
     async def disconnect(self, close_code):
         self.redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)

@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -28,6 +30,27 @@
   </body>
 
   <script>
+    function uuidv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    const worker = new SharedWorker('{% static "js/shared-worker.js" %}#{{ room_name }}')
+
+    worker.port.onmessage = function(e) {
+      var data = e.data
+      var totalConnections = data['connections']
+      var lastUpdated = data['updated']
+
+      document.querySelector('#count').textContent = totalConnections
+      document.querySelector('#updated').textContent = lastUpdated
+    }
+
+    worker.port.start()
+
+    /*
     var chatSocket = new WebSocket('ws://' + window.location.host + '/ws/count/{{ room_name }}/')
 
     chatSocket.onmessage = function(e) {
@@ -42,6 +65,7 @@
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     }
+    */
 
   </script>
 </html>
